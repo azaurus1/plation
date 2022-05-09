@@ -1,6 +1,9 @@
 pragma solidity ^0.8.7;
 
-contract Prediction {
+import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
+import "./PredictionHandler.sol";
+
+contract Prediction is ConfirmedOwner {
     enum BetType{
         Over,
         Under
@@ -19,6 +22,7 @@ contract Prediction {
     uint256 public index;
     uint256 public overPool;
     uint256 public underPool;
+    uint256 public inflIndex;
     Status public status;
     mapping(address => Bet) public bets;
 
@@ -38,15 +42,15 @@ contract Prediction {
         underPool += msg.value;
     }
 
-    function openPredictions() public {
+    function openPredictions() public onlyOwner {
         status = Status.Open;
     }
 
-    function closePredictions() public {
+    function closePredictions() public onlyOwner {
         status = Status.Closed;
     }
 
-    function payout(string memory _result) public {
+    function payout(string memory _result) public onlyOwner {
         if (keccak256(abi.encodePacked(_result)) == keccak256(abi.encodePacked("UNDER"))){
             //Under
 
@@ -63,8 +67,9 @@ contract Prediction {
         return (address(this).balance);
     }
 
-    constructor () {
+    constructor(uint256 _inflIndex) ConfirmedOwner(msg.sender) {
         status = Status.Closed;
+        inflIndex = _inflIndex;
     }
 
 
