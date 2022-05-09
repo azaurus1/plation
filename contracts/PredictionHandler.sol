@@ -14,6 +14,8 @@ contract PredictionHandler is ConfirmedOwner {
     mapping(uint256 => address) public predictions;
 
     event predictionCreated(uint256 _predictionIndex, address _predictionAddress);
+    event predictionOpened(address _predictionAddress);
+    event predictionClosed(address _predictionAddress);
 
     function deployPrediction() public onlyOwner{
         inflation = inflationFeed.inflation();
@@ -26,11 +28,13 @@ contract PredictionHandler is ConfirmedOwner {
     function openPrediction(address _predictionAddress) public onlyOwner{
         predictionContract = Prediction(_predictionAddress);
         predictionContract.openPredictions();
+        emit predictionOpened(address(predictionContract));
     }
 
     function closePrediction(address _predictionAddress) public onlyOwner{
         predictionContract = Prediction(_predictionAddress);
         predictionContract.closePredictions();
+        emit predictionClosed(address(predictionContract));
     }
 
     constructor(address _inflationFeedAddress) ConfirmedOwner(msg.sender) {
