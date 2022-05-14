@@ -5,7 +5,7 @@ An on-chain prediction market for inflation using Truflations inflation oracle. 
 # Design
 System design overview:
 
-![plation drawio](https://user-images.githubusercontent.com/59070507/168420298-7084e601-a84a-48ea-8341-938360644f64.png)
+![plation drawio](https://user-images.githubusercontent.com/59070507/168420979-c52a03ea-cea3-48cb-b524-552924c4f152.png)
 
 # Prediction payout model
 1. Users bet on a prediction contract for a certain amount for whether inflation will rise in the next cycle, or will drop. The wagers are pooled together.
