@@ -10,11 +10,12 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { Container } from "@mui/material";
 import { Box } from "@mui/material";
 import CurrentPrediction from "./CurrentPrediction";
+import { ContentPasteSearchOutlined } from "@mui/icons-material";
 
 const mdTheme = createTheme();
 
 class App extends Component {
-  state = {web3:null, accounts:null, PredictionHandler: null, PastEvents: [] };
+  state = {web3:null, accounts:null, PredictionHandler: null, PastEvents: [], LastPrediction:[] };
 
   componentDidMount = async () => {
     try {
@@ -36,11 +37,25 @@ class App extends Component {
   getPastEvents = async () => {
     const {PredictionHandler, PastEvents} = this.state;
     let options = {filter: {},fromBlock: 0,toBlock: 'latest'};
-    PredictionHandler.getPastEvents('predictionCreated', options).then(results => console.log(results));
-    PredictionHandler.getPastEvents('predictionCreated', options).then(results => this.setState({PastEvents:results}));
-    console.log(this.state.PastEvents);
+    PredictionHandler.getPastEvents('predictionCreated', options).then(results => this.setState({PastEvents:results},this.getLastPrediction));
   };
 
+  getLastPrediction = async () =>{
+    const {web3, PastEvents, LastPrediction} = this.state;
+    const recentArr = {};
+    const recent = this.state.PastEvents[this.state.PastEvents.length - 1];
+    //console.log('Last Prediction');
+    const Prediction = new web3.eth.Contract(PredictionContract.abi,recent.returnValues._predictionAddress);
+    const totalPool = await Prediction.methods.totalPool().call();
+    const overPool = await Prediction.methods.overPool().call();
+    const underPool = await Prediction.methods.underPool().call();
+    recentArr["address"] = recent.returnValues._predictionAddress;
+    recentArr["totalPool"]=totalPool;
+    recentArr["overPool"]=overPool;
+    recentArr["underPool"]=underPool;
+    this.setState({LastPrediction:recentArr});
+  }
+  
   render() {
     return (
       <ThemeProvider theme={mdTheme}>
@@ -51,7 +66,7 @@ class App extends Component {
               <h1>Prediction Market for CPI</h1>
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  {CurrentPrediction()}
+                  {CurrentPrediction(this.state.LastPrediction)}
                 </Paper>
               </Grid>
               <Grid item xs={12}>
