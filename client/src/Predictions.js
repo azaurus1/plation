@@ -8,6 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 import getWeb3 from "./getWeb3";
 import PredictionHandlerContract from "./contracts/PredictionHandler.json";
+import { Paper } from '@mui/material';
 
 function preventDefault(event) {
   event.preventDefault();

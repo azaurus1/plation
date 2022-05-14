@@ -2,14 +2,16 @@ import * as React from 'react';
 import Title from './Title';
 import getWeb3 from "./getWeb3";
 import PredictionHandlerContract from "./contracts/PredictionHandler.json";
-import { Avatar } from '@mui/material';
+import { Avatar, Divider } from '@mui/material';
 import {ArrowUpward, CircleOutlined} from '@mui/icons-material';
 import { ArrowDownward } from '@mui/icons-material';
 import { Grid } from '@mui/material';
 import { blue, red, green } from '@mui/material/colors';
 import { Paper } from '@mui/material';
-import { CardHeader } from '@mui/material';
-import { Divider } from '@mui/material';
+import { Typography } from '@mui/material';
+import { List, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
+import RadialChart from './RadialChart.js';
+import PredictionButtons from './PredictionButtons';
 
 
 
@@ -24,48 +26,89 @@ export default function CurrentPrediction(props) {
   }else{
   return (
     <React.Fragment>
-        <Paper>
-        <Title>Current Prediction</Title>
+      <Title>Current Prediction</Title>
+      <Typography component="p" variant="h4">
         {props.address}
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-            <Grid item xs={2}>
-                <CardHeader avatar={
-                <Avatar sx={{ bgcolor: green[500] }}>
-                    <ArrowUpward />
-                </Avatar>
-                }
-                title = {"Over Pool"}
-                />
-            </Grid>
-            <Grid item xs={10}>
-              {props.overPool}
-            </Grid>
-            <Grid item xs={2}>
-            <CardHeader avatar={
+      </Typography>
+      <Divider/>
+      <Grid container>
+        <Grid item xs={3}>
+          <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+            <ListItem alignItems="flex-start">
+            <ListItemAvatar>
+              <Avatar sx={{ bgcolor: green[500] }}>
+                <ArrowUpward />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              primary="Over Pool"
+              secondary={
+                <React.Fragment>
+                  <Typography
+                    sx={{ display: 'inline' }}
+                    component="span"
+                    variant="body"
+                    color="text.primary"
+                  >
+                    {props.overPool} wei
+                  </Typography>
+                </React.Fragment>
+              }
+            />
+          </ListItem>
+          <ListItem alignItems="flex-start">
+            <ListItemAvatar>
                 <Avatar sx={{ bgcolor: red[500] }}>
-                    <ArrowDownward />
+                  <ArrowDownward />
                 </Avatar>
-                }
-                title = {"Under Pool"}
-                />
-            </Grid>
-            <Grid item xs={10}>
-              {props.underPool}
-            </Grid>
-            <Grid item xs={2}>
-                <CardHeader avatar={
-                <Avatar sx={{ bgcolor: blue[500] }}>
+            </ListItemAvatar>
+            <ListItemText
+              primary="Under Pool"
+              secondary={
+                <React.Fragment>
+                  <Typography
+                    sx={{ display: 'inline' }}
+                    component="span"
+                    variant="body2"
+                    color="text.primary"
+                  >
+                    {props.underPool} wei
+                  </Typography>
+                </React.Fragment>
+              }
+            />
+          </ListItem>
+          <ListItem alignItems="flex-start">
+            <ListItemAvatar>
+              <Avatar sx={{ bgcolor: blue[500] }}>
                     <CircleOutlined />
                 </Avatar>
-                }
-                title = {"Total Pool"}
-                />
-            </Grid>
-            <Grid item xs={10}>
-              {props.totalPool}
-            </Grid>
+            </ListItemAvatar>
+            <ListItemText
+              primary="Total Pool"
+              secondary={
+                <React.Fragment>
+                  <Typography
+                    sx={{ display: 'inline' }}
+                    component="span"
+                    variant="body2"
+                    color="text.primary"
+                  >
+                    {props.totalPool} wei
+                  </Typography>
+                </React.Fragment>
+              }
+            />
+          </ListItem>  
+        </List>
         </Grid>
-        </Paper>
+        <Grid item xs={6}>
+          <RadialChart/>
+        </Grid>
+        <Grid item xs={3}>
+              <PredictionButtons />
+        </Grid>
+      </Grid>
     </React.Fragment>
   );
   }
