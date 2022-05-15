@@ -32,8 +32,11 @@ export default function CurrentPrediction(props) {
       </Typography>
       <Divider/>
       <Grid container>
+        <Grid item xs={6}>
+          {RadialChart([parseInt(props.overPool),parseInt(props.underPool)])}
+        </Grid>
         <Grid item xs={3}>
-          <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
             <ListItem alignItems="flex-start">
             <ListItemAvatar>
               <Avatar sx={{ bgcolor: green[500] }}>
@@ -102,11 +105,8 @@ export default function CurrentPrediction(props) {
           </ListItem>  
         </List>
         </Grid>
-        <Grid item xs={6}>
-          <RadialChart/>
-        </Grid>
         <Grid item xs={3}>
-              <PredictionButtons />
+          {PredictionButtons(props)}
         </Grid>
       </Grid>
     </React.Fragment>

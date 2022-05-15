@@ -63,7 +63,7 @@ class App extends Component {
           <CssBaseline />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <div className="App">
-              <h1>Prediction Market for CPI</h1>
+              <h1>plation: Prediction Market for CPI</h1>
               <Grid item xs={12} sx={{ mt: 4, mb: 4 }}>
                 <Paper elevation={6} sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                   {CurrentPrediction(this.state.LastPrediction)}
