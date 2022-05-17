@@ -7,8 +7,6 @@ export default function DonutChart(props){
         labels: ["Over", "Under"],
       };
 
-      console.log(props);
-
       return (
         <div className="donut">
           <Chart options={options} series={props} type="donut" width="380" />

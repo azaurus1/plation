@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import { Button } from '@mui/material';
 import { ButtonGroup } from '@mui/material';
 import { Box } from '@mui/system';
@@ -9,24 +8,41 @@ import { TextField } from '@mui/material';
 import { Divider } from '@mui/material';
 import { Grid } from '@mui/material';
 import { InputAdornment } from '@mui/material';
+import getWeb3 from './getWeb3';
+import PredictionContract from "./contracts/Prediction.json";
 
-  function BetOverModal() {
+  function BetOverModal(props) {
+    const [values, setValues] = React.useState({
+      amount: 0,
+    });
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const handleChange = (prop) => (event) => {
+      setValues({ ...values, [prop]: event.target.value });
+    };
+    
+    const handleBet = () => {
+      const web3 = props.props.web3;
+      const LastPrediction = props.props.LastPrediction;
+      const accounts = props.props.accounts;
+      const Prediction = new web3.eth.Contract(PredictionContract.abi,LastPrediction.address);
+      console.log(`from:${accounts[0]}, gas:3000000, value:${web3.utils.toWei(values.amount,'ether')}`);
+      Prediction.methods.betOver().call({from:accounts[0], gas:3000000, value:web3.utils.toWei(values.amount,'ether')});
+    }
 
     const style = {
       position: 'absolute',
-      top: '50%',
+      top: '30%',
       left: '50%',
       transform: 'translate(-50%, -50%)',
-      width: 800,
+      width: 500,
       bgcolor: 'background.paper',
       border: '2px solid #000',
       boxShadow: 24,
       p: 4,
     };
-  
+
     return (
       <div>
         <Button onClick={handleOpen} variant="contained" fullWidth key="one" color="success" >Bet Over</Button>
@@ -37,14 +53,14 @@ import { InputAdornment } from '@mui/material';
           aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-            <Grid container>
+            <Grid spacing={2} container>
               <Grid item xs={12}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                   Bet Over
                 </Typography>
                 <Divider/>
               </Grid>
-              <Grid item sx={{mt:3}} xs={6}>
+              <Grid item sx={{mt:3}} xs={12}>
                 <TextField
                     id="outlined-number"
                     label="Wager Amount"
@@ -56,7 +72,16 @@ import { InputAdornment } from '@mui/material';
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    value={values.amount}
+                    onChange={handleChange('amount')}
                   />  
+              </Grid>
+              <Grid item xs={6}/>
+              <Grid item xs={3}>
+                <Button variant="contained" onClick={handleBet} fullWidth color="success" >Bet</Button>
+              </Grid>
+              <Grid item xs={3}>
+                <Button variant="contained" onClick={handleClose} fullWidth color="error" >Cancel</Button>
               </Grid>
             </Grid>
           </Box>
@@ -69,13 +94,19 @@ import { InputAdornment } from '@mui/material';
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const [values, setValues] = React.useState({
+      amount: '',
+    });
+    const handleChange = (prop) => (event) => {
+      setValues({ ...values, [prop]: event.target.value });
+    };
 
     const style = {
       position: 'absolute',
-      top: '50%',
+      top: '30%',
       left: '50%',
       transform: 'translate(-50%, -50%)',
-      width: 800,
+      width: 500,
       bgcolor: 'background.paper',
       border: '2px solid #000',
       boxShadow: 24,
@@ -92,14 +123,14 @@ import { InputAdornment } from '@mui/material';
           aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-          <Grid container>
+          <Grid spacing={2} container>
               <Grid item xs={12}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                   Bet Under
                 </Typography>
                 <Divider/>
               </Grid>
-              <Grid item sx={{mt:3}} xs={6}>
+              <Grid item sx={{mt:3}} xs={12}>
                 <TextField
                     id="outlined-number"
                     label="Wager Amount"
@@ -111,7 +142,16 @@ import { InputAdornment } from '@mui/material';
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    value={values.amount}
+                    onChange={handleChange('amount')}
                   />
+              </Grid>
+              <Grid item xs={6}/>
+              <Grid item xs={3}>
+                <Button variant="contained" fullWidth color="success" >Bet</Button>
+              </Grid>
+              <Grid item xs={3}>
+                <Button variant="contained" onClick={handleClose} fullWidth color="error" >Cancel</Button>
               </Grid>
             </Grid>
           </Box>
@@ -127,7 +167,7 @@ import { InputAdornment } from '@mui/material';
           sx={{ '& button': { mt:2 ,mb: 2 } }}
         >
           <div>
-            <BetOverModal />
+            <BetOverModal props={props}/>
           </div>
           <div>
             <BetUnderModal />

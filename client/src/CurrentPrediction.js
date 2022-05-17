@@ -24,16 +24,17 @@ export default function CurrentPrediction(props) {
     console.log('Loading');
     return 'Loading';
   }else{
+    console.log(props);
   return (
     <React.Fragment>
       <Title>Current Prediction</Title>
       <Typography component="p" variant="h4">
-        {props.address}
+        {props.LastPrediction.address}
       </Typography>
       <Divider/>
       <Grid container>
         <Grid item xs={6}>
-          {RadialChart([parseInt(props.overPool),parseInt(props.underPool)])}
+          {RadialChart([parseInt(props.LastPrediction.overPool),parseInt(props.LastPrediction.underPool)])}
         </Grid>
         <Grid item xs={3}>
         <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
@@ -53,7 +54,7 @@ export default function CurrentPrediction(props) {
                     variant="body"
                     color="text.primary"
                   >
-                    {props.overPool} wei
+                    {props.LastPrediction.overPool} wei
                   </Typography>
                 </React.Fragment>
               }
@@ -75,7 +76,7 @@ export default function CurrentPrediction(props) {
                     variant="body2"
                     color="text.primary"
                   >
-                    {props.underPool} wei
+                    {props.LastPrediction.underPool} wei
                   </Typography>
                 </React.Fragment>
               }
@@ -97,7 +98,7 @@ export default function CurrentPrediction(props) {
                     variant="body2"
                     color="text.primary"
                   >
-                    {props.totalPool} wei
+                    {props.LastPrediction.totalPool} wei
                   </Typography>
                 </React.Fragment>
               }

@@ -66,7 +66,7 @@ class App extends Component {
               <h1>plation: Prediction Market for CPI</h1>
               <Grid item xs={12} sx={{ mt: 4, mb: 4 }}>
                 <Paper elevation={6} sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  {CurrentPrediction(this.state.LastPrediction)}
+                  {CurrentPrediction(this.state)}
                 </Paper>
               </Grid>
               <Grid item xs={12} sx={{ mt: 4, mb: 4 }}>
