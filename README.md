@@ -48,3 +48,6 @@ System design overview:
 # Keeper architecture
 
 ![KeeperArchitecture drawio](https://user-images.githubusercontent.com/59070507/168991482-969a284a-5db5-467e-a168-7a318d92b050.png)
+
+Python keeper that keeps track of timings of predictions, when 24 hours is up, it orders the Prediction Handler to close the prediction, 
+gathers the details of the betters and calculates the payouts, then orders the prediction handler to payout the winnings to the winning accounts.
