@@ -45,7 +45,6 @@ System design overview:
 **If inflation drops:
 	Person 2 gets 7 ETH + 100% of losers wagers (10 ETH)**
 	
-==========================================
 # Keeper architecture
 
 ![KeeperArchitecture drawio](https://user-images.githubusercontent.com/59070507/168991482-969a284a-5db5-467e-a168-7a318d92b050.png)
