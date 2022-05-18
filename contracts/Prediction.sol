@@ -25,6 +25,10 @@ contract Prediction is ConfirmedOwner {
     uint256 public inflIndex;
     Status public status;
     mapping(address => Bet) public bets;
+    address payable payableOwner;
+
+    event AddressBetOver(address _bettingAddress);
+    event AddressBetUnder(address _bettingAddress);
 
     function betOver() public payable {
         require(status == Status.Open, "The prediction is closed!");
@@ -32,6 +36,7 @@ contract Prediction is ConfirmedOwner {
         require(!bets[msg.sender].entered, "You have already entered!");
         bets[msg.sender] = Bet(BetType.Over,msg.value, true);
         overPool += msg.value;
+        emit AddressBetOver(msg.sender);
     }
 
     function betUnder() public payable {
@@ -40,6 +45,7 @@ contract Prediction is ConfirmedOwner {
         require(!bets[msg.sender].entered, "You have already entered!");
         bets[msg.sender] = Bet(BetType.Under,msg.value, true);
         underPool += msg.value;
+        emit AddressBetUnder(msg.sender);
     }
 
     function openPredictions() public onlyOwner {
@@ -48,19 +54,8 @@ contract Prediction is ConfirmedOwner {
 
     function closePredictions() public onlyOwner {
         status = Status.Closed;
-    }
-
-    function payout(string memory _result) public onlyOwner {
-        if (keccak256(abi.encodePacked(_result)) == keccak256(abi.encodePacked("UNDER"))){
-            //Under
-
-
-        } else if (keccak256(abi.encodePacked(_result)) == keccak256(abi.encodePacked("OVER"))){
-            //Over
-
-        } else {
-            // No change in rate
-        }
+        payableOwner = payable(address(owner()));
+        payableOwner.transfer(address(this).balance);
     }
 
     function totalPool() public view returns(uint256){

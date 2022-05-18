@@ -41,4 +41,6 @@ contract PredictionHandler is ConfirmedOwner {
         inflationFeed = InflationFeed(_inflationFeedAddress);
     }   
 
+    receive() external payable {}
+
 }

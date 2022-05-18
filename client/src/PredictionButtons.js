@@ -22,13 +22,14 @@ import PredictionContract from "./contracts/Prediction.json";
       setValues({ ...values, [prop]: event.target.value });
     };
     
-    const handleBet = () => {
+    const handleBet = async () => {
       const web3 = props.props.web3;
       const LastPrediction = props.props.LastPrediction;
       const accounts = props.props.accounts;
       const Prediction = new web3.eth.Contract(PredictionContract.abi,LastPrediction.address);
       console.log(`from:${accounts[0]}, gas:3000000, value:${web3.utils.toWei(values.amount,'ether')}`);
-      Prediction.methods.betOver().call({from:accounts[0], gas:3000000, value:web3.utils.toWei(values.amount,'ether')});
+      const betOver = await Prediction.methods.betOver().send({from:accounts[0], gas:3000000, value:web3.utils.toWei(values.amount,'ether')});
+      console.log(betOver);
     }
 
     const style = {
@@ -90,16 +91,26 @@ import PredictionContract from "./contracts/Prediction.json";
     );
   }
 
-  function BetUnderModal() {
+  function BetUnderModal(props) {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [values, setValues] = React.useState({
-      amount: '',
+      amount: 0,
     });
     const handleChange = (prop) => (event) => {
       setValues({ ...values, [prop]: event.target.value });
     };
+
+    const handleBet = async () => {
+      const web3 = props.props.web3;
+      const LastPrediction = props.props.LastPrediction;
+      const accounts = props.props.accounts;
+      const Prediction = new web3.eth.Contract(PredictionContract.abi,LastPrediction.address);
+      console.log(`from:${accounts[0]}, gas:3000000, value:${web3.utils.toWei(values.amount,'ether')}`);
+      const betOver = await Prediction.methods.betUnder().send({from:accounts[0], gas:3000000, value:web3.utils.toWei(values.amount,'ether')});
+      console.log(betOver);
+    }
 
     const style = {
       position: 'absolute',
@@ -148,7 +159,7 @@ import PredictionContract from "./contracts/Prediction.json";
               </Grid>
               <Grid item xs={6}/>
               <Grid item xs={3}>
-                <Button variant="contained" fullWidth color="success" >Bet</Button>
+                <Button variant="contained" onClick={handleBet} fullWidth color="success" >Bet</Button>
               </Grid>
               <Grid item xs={3}>
                 <Button variant="contained" onClick={handleClose} fullWidth color="error" >Cancel</Button>
@@ -160,7 +171,7 @@ import PredictionContract from "./contracts/Prediction.json";
     );
   }
  
-  export default function PredictionButtons(props) {    
+  export default function PredictionButtons(props) {  
     return (
       <React.Fragment>
         <Box
@@ -170,10 +181,10 @@ import PredictionContract from "./contracts/Prediction.json";
             <BetOverModal props={props}/>
           </div>
           <div>
-            <BetUnderModal />
+            <BetUnderModal props={props}/>
           </div>
           <div>
-            <Button variant="contained" fullWidth key="three">View Prediction</Button>
+            <Button variant="contained" href={"https://rinkeby.etherscan.io/address/"+props.LastPrediction.address} target="_blank" fullWidth key="three">View Prediction</Button>
           </div>
         </Box>
       </React.Fragment>
