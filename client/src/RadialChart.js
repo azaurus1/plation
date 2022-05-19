@@ -5,7 +5,7 @@ import Chart from "react-apexcharts";
 export default function DonutChart(props){
       const options = {
         labels: ["Over", "Under"],
-        colors: ['#FF0000','#00FF00'],
+        colors: ['#00FF00','#FF0000'],
       };
 
       return (
