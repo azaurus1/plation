@@ -1,17 +1,22 @@
+from audioop import add
 from web3.auto import Web3
 import os, json, time, threading
 
 def sendClose(address):
     #Build Transaction
-    print(address)
-    txn = PredictionHandler.functions.closePrediction(
-        address
-        ).buildTransaction(
-            {
-                'from':'0x0a29bd68d085CcFa30bDFf2c2ca849D5976a4C9D',
-                'nonce':w3.eth.getTransactionCount('0x0a29bd68d085CcFa30bDFf2c2ca849D5976a4C9D')
-            }
-        )
+    print('sending close to prediction: '+address)
+    try:
+        txn = PredictionHandler.functions.closePrediction(
+            address
+            ).buildTransaction(
+                {
+                    'from':'0x0a29bd68d085CcFa30bDFf2c2ca849D5976a4C9D',
+                    'nonce':nonce
+                }
+            )
+    except ValueError:
+        print('Transaction Reverted')
+        return None
     print('txn')
     print(txn)
     print('------------------')
@@ -22,15 +27,48 @@ def sendClose(address):
     print('------------------')
     #Broadcast the transaction with send_raw_transaction()
     w3.eth.sendRawTransaction(signed_txn.rawTransaction)
+    incrementNonce()
+
+def sendPayout(address,amount):
+    print('sending payout to '+address)
+    try:
+        txn = PredictionHandler.functions.payout(
+            address,
+            amount
+            ).buildTransaction(
+                {
+                    'from':'0x0a29bd68d085CcFa30bDFf2c2ca849D5976a4C9D',
+                    'nonce': nonce
+                }
+            )
+    except ValueError:
+        print('Transaction Reverted')
+        return None
+    print('txn')
+    print(txn)
+    print('------------------')
+    #Sign transaction with w3.eth.account.sign_transaction()
+    signed_txn = w3.eth.account.sign_transaction(txn,Priv)
+    print('signed txn')
+    print(signed_txn)
+    print('------------------')
+    #Broadcast the transaction with send_raw_transaction()
+    w3.eth.sendRawTransaction(signed_txn.rawTransaction)
+    incrementNonce()
 
 def sendUpdateInflationOracle():
-    txn = InflationOracle.functions.requestInflationData(
-        ).buildTransaction(
-            {
-                'from':'0x0a29bd68d085CcFa30bDFf2c2ca849D5976a4C9D',
-                'nonce':w3.eth.getTransactionCount('0x0a29bd68d085CcFa30bDFf2c2ca849D5976a4C9D')
-            }
-        )
+    print('Updating inflation oracle')
+    try:
+        txn = InflationOracle.functions.requestInflationData(
+            ).buildTransaction(
+                {
+                    'from':'0x0a29bd68d085CcFa30bDFf2c2ca849D5976a4C9D',
+                    'nonce':nonce
+                }
+            )
+    except ValueError:
+        print('Transaction Reverted')
+        return None
     print('txn')
     print(txn)
     print('------------------')
@@ -41,8 +79,10 @@ def sendUpdateInflationOracle():
     print('------------------')
     #Broadcast the transaction with send_raw_transaction()
     w3.eth.sendRawTransaction(signed_txn.rawTransaction)
+    incrementNonce()
 
 def getBets(address):
+    print('Getting bets for prediction: '+address)
     #init
     overBetters = []
     underBetters = []
@@ -91,17 +131,24 @@ def getLastOpenedPrediction():
 
     return lastOpened['args']['_predictionAddress']
 
-def calculatePayout(closingInflation,newInflation,totalPool,overPool,underPool,overDict,underDict):
+def calculateAndSendPayout(closingInflation,newInflation,totalPool,overPool,underPool,overDict,underDict):
     winnerShare = {}
+    payoutDict = {}
     #Inflation drops
     #under betters win
     if(closingInflation < newInflation):
         for i in underDict:
             share = (underDict[i]/underPool)
             winnerShare[i] = share
-        
+        #initial bets
+        for i in underDict:
+            payoutDict[i] = underDict[i]
+        #shares of losing pool
         for winner in winnerShare:
-            print(winner)
+            print(winner, winnerShare[winner]*overPool)
+        #send payout transactions
+        for payout in payoutDict:
+            sendPayout(payout,payoutDict[payout])
 
     #Inflation rises
     #over betters win
@@ -109,20 +156,30 @@ def calculatePayout(closingInflation,newInflation,totalPool,overPool,underPool,o
         for i in overDict:
             share = (overDict[i]/overPool)
             winnerShare[i] = share
+        #initial bets
+        for i in overDict:
+            payoutDict[i] = overDict[i]
+        #shares of losing pool
+        for winner in winnerShare:
+            print(winner, winnerShare[winner]*underPool)
+        #send payout transactions
+        for payout in payoutDict:
+            sendPayout(payout,payoutDict[payout])
 
     #inflation index hasnt changed
     #bets refunded
     else:
         print('no change in inflation')
+        refundDict = {}
+        for i in overDict:
+            refundDict[i] = overDict[i]
+        for e in underDict:
+            refundDict[e] = underDict[e]
 
-    for i in underDict:
-            share = (underDict[i]/underPool)
-            winnerShare[i] = share
-
-            for winner in winnerShare:
-                print(winner,winnerShare[winner])
-
-
+        for refund in refundDict:
+            sendPayout(refund,refundDict[refund])
+ 
+     
 def handle_opened(event):
     print(event['args']['_predictionAddress'])
     predictionAddr = str(event['args']['_predictionAddress'])
@@ -151,10 +208,10 @@ def handle_closed(event):
     for e in underBetters:
         underDict[e] = getBetAmount(LastClosed,e)[1]
 
-    #Calculate payouts
-    calculatePayout(PredictionInflationIndex,NewInflationIndex,totalPool,overPool,underPool,overDict,underDict)
+    #Calculate payouts and send payouts
+    calculateAndSendPayout(PredictionInflationIndex,NewInflationIndex,totalPool,overPool,underPool,overDict,underDict)
 
-    #sequentially request payouts
+    
 
 
 def log_loop(event_filter, poll_interval):
@@ -165,6 +222,7 @@ def log_loop(event_filter, poll_interval):
             time.sleep(poll_interval)
 
 def listenerThread():
+    print('Starting listener thread')
     predictionClosed_filter = PredictionHandler.events.predictionClosed.createFilter(fromBlock=0,toBlock='latest')
     while True:
         for event in predictionClosed_filter.get_new_entries():
@@ -172,18 +230,22 @@ def listenerThread():
             time.sleep(2)
 
 def closerThread():
+    print('Starting closer thread')
+    while True:
     #Get last opened prediction
-    lastPredicition = getLastOpenedPrediction()
+        lastPredicition = getLastOpenedPrediction()
+        #Close last opened predicition
+        sendClose(lastPredicition)
+        #time.sleep(90)
+        #update oracle
+        sendUpdateInflationOracle()
+        #time.sleep(90)
+        #wait 24 hours (timePeriod) (86400)
+        time.sleep(30)
 
-    #Close last opened predicition
-    #sendClose(lastPredicition)
-
-    #update oracle
-    #sendUpdateInflationOracle()
-
-    #wait 24 hours
-    time.sleep(5)
-
+def incrementNonce():
+    global nonce
+    nonce = nonce + 1
 
 
     
@@ -191,23 +253,26 @@ def closerThread():
 
 
 #Init
-global Priv 
-global PredictionHandler
-global InflationOracle
-global PredictionABI
-global LastClosed
+#Globals
+#global Priv 
+#global PredictionHandler
+#global InflationOracle
+#global PredictionABI
+#global LastClosed
+#global nonce
 
 Priv = os.getenv('PRIV_KEY')
 Provider = os.getenv('RPC')
 w3 = Web3(Web3.HTTPProvider(Provider))
 openDict = {}
 timePeriod = 86400
+nonce = w3.eth.getTransactionCount('0x0a29bd68d085CcFa30bDFf2c2ca849D5976a4C9D')
 
 
 
 #Contracts Addresses
-PredictionHandlerAddr = '0xd798158512eC1947dc33C87C82cCCD3f19C67A3f'
-InflationOracelAddr = '0xCa4B1B05AA433Fc397959cEDdb897DBAFe9C8E87'
+PredictionHandlerAddr = '0x5f6Cb1AA339Fe8d6C7Bb8866527c4E2Cfaa31556'
+InflationOracleAddr = '0xCa4B1B05AA433Fc397959cEDdb897DBAFe9C8E87'
 
 #ABI
 with open('./keeper/contracts/PredictionHandler.json') as f:
@@ -221,7 +286,7 @@ with open('./keeper/contracts/Prediction.json') as f:
 
 #Contract
 PredictionHandler = w3.eth.contract(address=PredictionHandlerAddr,abi=PredictionHandlerABI)
-InflationOracle = w3.eth.contract(address=InflationOracelAddr,abi=InflationOracleABI)
+InflationOracle = w3.eth.contract(address=InflationOracleAddr,abi=InflationOracleABI)
 
 #Event Filters
 predictionCreated_filter = PredictionHandler.events.predictionCreated.createFilter(fromBlock=0,toBlock='latest')
@@ -231,9 +296,13 @@ predictionClosed_filter = PredictionHandler.events.predictionClosed.createFilter
 #Loop
 #log_loop(predictionOpened_filter,2)
 #log_loop(predictionClosed_filter,2)
-overBetters, underBetters = getBets('0x75a27c8c7CCE22A9085B92851f57406C9A40c7ec')
+#overBetters, underBetters = getBets('0x06D4dfb5F4f45B1587CA6d60314579De520399b9')
 
-handle_closed({'args':{'_predictionAddress':'0x75a27c8c7CCE22A9085B92851f57406C9A40c7ec'}})
+if __name__ == '__main__':
+    threading.Thread(target=closerThread).start()
+    threading.Thread(target=listenerThread).start()
+
+#handle_closed({'args':{'_predictionAddress':'0x06D4dfb5F4f45B1587CA6d60314579De520399b9'}})
 
 
 

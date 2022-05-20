@@ -37,6 +37,10 @@ contract PredictionHandler is ConfirmedOwner {
         emit predictionClosed(address(predictionContract));
     }
 
+    function payout(address payable _winnerAddress, uint256 _amount) public onlyOwner{
+        _winnerAddress.transfer(_amount);
+    }
+
     constructor(address _inflationFeedAddress) ConfirmedOwner(msg.sender) {
         inflationFeed = InflationFeed(_inflationFeedAddress);
     }   

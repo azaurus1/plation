@@ -53,6 +53,7 @@ contract Prediction is ConfirmedOwner {
     }
 
     function closePredictions() public onlyOwner {
+        require(status == Status.Open, "This prediction is already closed!");
         status = Status.Closed;
         payableOwner = payable(address(owner()));
         payableOwner.transfer(address(this).balance);
