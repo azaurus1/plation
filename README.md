@@ -45,9 +45,14 @@ System design overview:
 **If inflation drops:
 	Person 2 gets 7 ETH + 100% of losers wagers (10 ETH)**
 	
-# Keeper architecture
+# Python Keeper architecture
 
 ![KeeperArchitecture drawio](https://user-images.githubusercontent.com/59070507/168991482-969a284a-5db5-467e-a168-7a318d92b050.png)
 
-Python keeper that keeps track of timings of predictions, when 24 hours is up, it orders the Prediction Handler to close the prediction, 
-gathers the details of the betters and calculates the payouts, then orders the prediction handler to payout the winnings to the winning accounts.
+Python keeper that keeps track of timings of predictions, listens for the prediction closed event being emitted on the handler contract and orders the prediction handler to payout the winnings. 
+
+# Chainlink Keepers
+
+![Untitled Diagram drawio](https://user-images.githubusercontent.com/59070507/170045009-53688008-eef2-4a72-863b-b50170acdee5.png)
+
+Two chainlink keepers, both with 24 hour intervals, one for closing the last prediction and one for requesting latest inflation oracle information. Should be started out of sync so that inflation oracle is always updated ahead of the new prediction.
