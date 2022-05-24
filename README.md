@@ -56,3 +56,16 @@ Python keeper that keeps track of timings of predictions, listens for the predic
 ![Untitled Diagram drawio](https://user-images.githubusercontent.com/59070507/170045009-53688008-eef2-4a72-863b-b50170acdee5.png)
 
 Two chainlink keepers, both with 24 hour intervals, one for closing the last prediction and one for requesting latest inflation oracle information. Should be started out of sync so that inflation oracle is always updated ahead of the new prediction.
+
+## Setup 
+
+1. Deploy Inflation oracle contract
+2. Deploy InflationUpkeep keeper with Inflation oracle address from 1.
+3. Deploy PredictionHandler contract
+4. Deploy a prediction with the PredictionHandler function
+5. Deploy the PredictionUpkeep contract 
+6. Use the setKeeper function on the PredictionHandler to set the Keeper to the address of the PredictionUpkeep contract from 5.
+7. Set up both keepers at keepers.chain.link
+8. Once both keepers have run once, start the keeper.py script with the PredictionHandlerAddr and InflationOracleAddr addresses set to the addresses from steps 3 and 1 respectively
+9. Now run npm start in the client folder
+10. You should now have the system set up!
