@@ -102,13 +102,7 @@
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "_predictionAddress",
-					"type": "address"
-				}
-			],
+			"inputs": [],
 			"name": "closePrediction",
 			"outputs": [],
 			"stateMutability": "nonpayable",
@@ -161,16 +155,16 @@
 			"type": "function"
 		},
 		{
-			"inputs": [
+			"inputs": [],
+			"name": "keeper",
+			"outputs": [
 				{
 					"internalType": "address",
-					"name": "_predictionAddress",
+					"name": "",
 					"type": "address"
 				}
 			],
-			"name": "openPrediction",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -247,6 +241,19 @@
 				}
 			],
 			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_keeperAddress",
+					"type": "address"
+				}
+			],
+			"name": "setKeeper",
+			"outputs": [],
+			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{
