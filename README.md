@@ -7,6 +7,19 @@ System design overview:
 
 ![plation drawio](https://user-images.githubusercontent.com/59070507/168420979-c52a03ea-cea3-48cb-b524-552924c4f152.png)
 
+## Setup 
+
+1. Deploy Inflation oracle contract
+2. Deploy InflationUpkeep keeper with Inflation oracle address from 1.
+3. Deploy PredictionHandler contract
+4. Deploy a prediction with the PredictionHandler function
+5. Deploy the PredictionUpkeep contract 
+6. Use the setKeeper function on the PredictionHandler to set the Keeper to the address of the PredictionUpkeep contract from 5.
+7. Set up both keepers at keepers.chain.link
+8. Once both keepers have run once, start the keeper.py script with the PredictionHandlerAddr and InflationOracleAddr addresses set to the addresses from steps 3 and 1 respectively
+9. Now run npm start in the client folder
+10. You should now have the system set up!
+
 # Prediction payout model
 1. Users bet on a prediction contract for a certain amount for whether inflation will rise in the next cycle, or will drop. The wagers are pooled together.
 2. Once the prediction timeframe is over, a keeper contract will request the handler contract to close the prediction and begin payouts based on the inflation index from the oracle.
@@ -57,15 +70,3 @@ Python keeper that keeps track of timings of predictions, listens for the predic
 
 Two chainlink keepers, both with 24 hour intervals, one for closing the last prediction and one for requesting latest inflation oracle information. Should be started out of sync so that inflation oracle is always updated ahead of the new prediction.
 
-## Setup 
-
-1. Deploy Inflation oracle contract
-2. Deploy InflationUpkeep keeper with Inflation oracle address from 1.
-3. Deploy PredictionHandler contract
-4. Deploy a prediction with the PredictionHandler function
-5. Deploy the PredictionUpkeep contract 
-6. Use the setKeeper function on the PredictionHandler to set the Keeper to the address of the PredictionUpkeep contract from 5.
-7. Set up both keepers at keepers.chain.link
-8. Once both keepers have run once, start the keeper.py script with the PredictionHandlerAddr and InflationOracleAddr addresses set to the addresses from steps 3 and 1 respectively
-9. Now run npm start in the client folder
-10. You should now have the system set up!
