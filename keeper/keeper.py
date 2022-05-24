@@ -241,14 +241,11 @@ def closerThread():
         sendUpdateInflationOracle()
         #time.sleep(90)
         #wait 24 hours (timePeriod) (86400)
-        time.sleep(30)
+        time.sleep(3600)
 
 def incrementNonce():
     global nonce
     nonce = nonce + 1
-
-
-    
 
 
 
@@ -271,7 +268,7 @@ nonce = w3.eth.getTransactionCount('0x0a29bd68d085CcFa30bDFf2c2ca849D5976a4C9D')
 
 
 #Contracts Addresses
-PredictionHandlerAddr = '0x5f6Cb1AA339Fe8d6C7Bb8866527c4E2Cfaa31556'
+PredictionHandlerAddr = '0x14761718d25ecc2CD452Ad8c35E7655F7d441779'
 InflationOracleAddr = '0xCa4B1B05AA433Fc397959cEDdb897DBAFe9C8E87'
 
 #ABI
@@ -299,7 +296,8 @@ predictionClosed_filter = PredictionHandler.events.predictionClosed.createFilter
 #overBetters, underBetters = getBets('0x06D4dfb5F4f45B1587CA6d60314579De520399b9')
 
 if __name__ == '__main__':
-    threading.Thread(target=closerThread).start()
+    #Closer Thread no longer needed due to keeper contracts
+    #threading.Thread(target=closerThread).start()
     threading.Thread(target=listenerThread).start()
 
 #handle_closed({'args':{'_predictionAddress':'0x06D4dfb5F4f45B1587CA6d60314579De520399b9'}})
