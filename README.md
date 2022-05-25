@@ -21,7 +21,9 @@ System design overview:
 10. You should now have the system set up!
 
 Gas limits for the keepers:
+
 Prediction Keeper: 1,250,000
+
 Inflation Keeper: 130,000
 
 # Prediction payout model
