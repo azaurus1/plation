@@ -20,6 +20,10 @@ System design overview:
 9. Now run npm start in the client folder
 10. You should now have the system set up!
 
+Gas limits for the keepers:
+Prediction Keeper: 1,250,000
+Inflation Keeper: 130,000
+
 # Prediction payout model
 1. Users bet on a prediction contract for a certain amount for whether inflation will rise in the next cycle, or will drop. The wagers are pooled together.
 2. Once the prediction timeframe is over, a keeper contract will request the handler contract to close the prediction and begin payouts based on the inflation index from the oracle.
