@@ -268,7 +268,7 @@ nonce = w3.eth.getTransactionCount('0x0a29bd68d085CcFa30bDFf2c2ca849D5976a4C9D')
 
 
 #Contracts Addresses
-PredictionHandlerAddr = '0x14761718d25ecc2CD452Ad8c35E7655F7d441779'
+PredictionHandlerAddr = '0x122dF77D0069667EFA788aD78650630cb7e8170d'
 InflationOracleAddr = '0xCa4B1B05AA433Fc397959cEDdb897DBAFe9C8E87'
 
 #ABI
