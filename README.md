@@ -2,6 +2,9 @@
 
 An on-chain prediction market for inflation using Truflations inflation oracle. An entry for the Chainlink Hackathon Spring 2022.
 
+Live version for Rinkeby network available at:
+htttp://194.195.248.44:3000
+
 # Design
 System design overview:
 
