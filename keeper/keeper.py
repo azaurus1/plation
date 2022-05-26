@@ -188,6 +188,8 @@ def handle_opened(event):
 
 
 def handle_closed(event):
+    global nonce
+    nonce = w3.eth.getTransactionCount('0x0a29bd68d085CcFa30bDFf2c2ca849D5976a4C9D')
     #wait for oracle to update after closing thread requests inflation data
     #time.sleep(100)
     #new inflation index

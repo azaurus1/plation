@@ -24,7 +24,7 @@ class App extends Component {
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
       // Get the contract instance.
-      const PredictionHandler = new web3.eth.Contract(PredictionHandlerContract.abi,"0x14761718d25ecc2CD452Ad8c35E7655F7d441779");
+      const PredictionHandler = new web3.eth.Contract(PredictionHandlerContract.abi,"0x122dF77D0069667EFA788aD78650630cb7e8170d");
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({web3, accounts, PredictionHandler: PredictionHandler},this.getPastEvents);
