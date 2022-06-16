@@ -1,6 +1,6 @@
 # plation
 
-An on-chain prediction market for inflation using Truflations inflation oracle. An entry for the Chainlink Hackathon Spring 2022.
+An on-chain prediction market for inflation using Truflations inflation oracle. A winner for the truflation sponsor prize for the Chainlink Hackathon Spring 2022.
 
 Live version for Rinkeby network available at:
 http://194.195.248.44:3000
