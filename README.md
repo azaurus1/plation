@@ -2,6 +2,8 @@
 
 An on-chain prediction market for inflation using Truflations inflation oracle. A winner for the truflation sponsor prize for the Chainlink Hackathon Spring 2022.
 
+live version available at: http://plation.io
+
 # Design
 System design overview:
 
