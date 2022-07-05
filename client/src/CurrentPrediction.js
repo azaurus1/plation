@@ -19,6 +19,9 @@ function preventDefault(event) {
   event.preventDefault();
 }
 
+//RADIAL GRAPH
+// {RadialChart([parseInt(props.LastPrediction.overPool),parseInt(props.LastPrediction.underPool)])}
+
 export default function CurrentPrediction(props) {
   if(props.length == 0){
     console.log('Loading');
@@ -27,86 +30,11 @@ export default function CurrentPrediction(props) {
     console.log(props);
   return (
     <React.Fragment>
-      <Title>Current Prediction</Title>
-      <Typography component="p" variant="h4">
-        {props.LastPrediction.address}
-      </Typography>
-      <Divider/>
       <Grid container>
-        <Grid item xs={6}>
+        <Grid item xs={7} sx={{pt:4}}>
           {RadialChart([parseInt(props.LastPrediction.overPool),parseInt(props.LastPrediction.underPool)])}
         </Grid>
-        <Grid item xs={3}>
-        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-            <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-              <Avatar sx={{ bgcolor: green[500] }}>
-                <ArrowUpward />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary="Over Pool"
-              secondary={
-                <React.Fragment>
-                  <Typography
-                    sx={{ display: 'inline' }}
-                    component="span"
-                    variant="body"
-                    color="text.primary"
-                  >
-                    {props.LastPrediction.overPool} wei
-                  </Typography>
-                </React.Fragment>
-              }
-            />
-          </ListItem>
-          <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-                <Avatar sx={{ bgcolor: red[500] }}>
-                  <ArrowDownward />
-                </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary="Under Pool"
-              secondary={
-                <React.Fragment>
-                  <Typography
-                    sx={{ display: 'inline' }}
-                    component="span"
-                    variant="body2"
-                    color="text.primary"
-                  >
-                    {props.LastPrediction.underPool} wei
-                  </Typography>
-                </React.Fragment>
-              }
-            />
-          </ListItem>
-          <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-              <Avatar sx={{ bgcolor: blue[500] }}>
-                    <CircleOutlined />
-                </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary="Total Pool"
-              secondary={
-                <React.Fragment>
-                  <Typography
-                    sx={{ display: 'inline' }}
-                    component="span"
-                    variant="body2"
-                    color="text.primary"
-                  >
-                    {props.LastPrediction.totalPool} wei
-                  </Typography>
-                </React.Fragment>
-              }
-            />
-          </ListItem>  
-        </List>
-        </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={5}>
           {PredictionButtons(props)}
         </Grid>
       </Grid>

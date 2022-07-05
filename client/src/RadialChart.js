@@ -5,12 +5,15 @@ import Chart from "react-apexcharts";
 export default function DonutChart(props){
       const options = {
         labels: ["Over", "Under"],
-        colors: ['#00FF00','#FF0000'],
+        colors: ['#F46228','#BABABA'],
+        legend: {show:false},
+        tooltip: {show: false},
+        datalabels: {enabled:false}
       };
 
       return (
         <div className="donut">
-          <Chart options={options} series={props} type="donut" width="380" />
+          <Chart options={options} series={props} type="donut" width="450" />
         </div>
       );
 }

@@ -46,7 +46,7 @@ import PredictionContract from "./contracts/Prediction.json";
 
     return (
       <div>
-        <Button onClick={handleOpen} variant="contained" fullWidth key="one" color="success" >Bet Over</Button>
+        <Button onClick={handleOpen} variant="contained" fullWidth key="one" color="info" sx={{height:80,borderRadius: 2.5}}>Bet Over</Button>
         <Modal
           open={open}
           onClose={handleClose}
@@ -126,7 +126,7 @@ import PredictionContract from "./contracts/Prediction.json";
   
     return (
       <div>
-        <Button onClick={handleOpen} variant="contained" fullWidth key="two" color="error" >Bet Under</Button>
+        <Button onClick={handleOpen} variant="contained" fullWidth key="two" color="tertiary" sx={{height:80,borderRadius: 2.5}}>Bet Under</Button>
         <Modal
           open={open}
           onClose={handleClose}
@@ -174,18 +174,18 @@ import PredictionContract from "./contracts/Prediction.json";
   export default function PredictionButtons(props) {  
     return (
       <React.Fragment>
-        <Box
-          sx={{ '& button': { mt:2 ,mb: 2 } }}
-        >
-          <div>
-            <BetOverModal props={props}/>
-          </div>
-          <div>
-            <BetUnderModal props={props}/>
-          </div>
-          <div>
-            <Button variant="contained" href={"https://rinkeby.etherscan.io/address/"+props.LastPrediction.address} target="_blank" fullWidth key="three">View Prediction</Button>
-          </div>
+        <Box>
+          <Grid container justifyContent="center" direction="column" sx={{mt:-1,pr:4}} rowSpacing={4}>
+            <Grid item>
+              <BetOverModal props={props}/>
+            </Grid>
+            <Grid item>
+              <BetUnderModal props={props}/>
+            </Grid>
+            <Grid item>
+              <Button variant="contained" href={"https://rinkeby.etherscan.io/address/"+props.LastPrediction.address} target="_blank" fullWidth key="three" sx={{height:80,borderRadius: 2.5}}>View</Button>
+            </Grid>
+          </Grid>
         </Box>
       </React.Fragment>
     );

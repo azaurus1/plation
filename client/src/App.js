@@ -11,8 +11,13 @@ import { Container } from "@mui/material";
 import { Box } from "@mui/material";
 import CurrentPrediction from "./CurrentPrediction";
 import { ContentPasteSearchOutlined } from "@mui/icons-material";
+import ButtonAppBar from "./AppBar";
+import { themeOptions } from "./Theme";
+import Title from './Title';
+import Categories from "./Categories";
+import About from "./About";
 
-const mdTheme = createTheme();
+const mdTheme = createTheme(themeOptions);
 
 class App extends Component {
   state = {web3:null, accounts:null, PredictionHandler: null, PastEvents: [], LastPrediction:[] };
@@ -59,20 +64,32 @@ class App extends Component {
   render() {
     return (
       <ThemeProvider theme={mdTheme}>
+        <ButtonAppBar />
         <Box sx={{ display: 'flex' }}>
           <CssBaseline />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Container maxWidth='false' sx={{ml:10,mr:10}}>
             <div className="App">
-              <h1>plation: Prediction Market for CPI</h1>
-              <Grid item xs={12} sx={{ mt: 4, mb: 4 }}>
-                <Paper elevation={6} sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  {CurrentPrediction(this.state)}
-                </Paper>
+              <Grid item container spacing={5} xs={12} sx={{mt: -4, mb: 4}}>
+                <Grid item xs={6}>
+                  <Title>LAST PREDICTION</Title> 
+                  <Paper elevation={6} sx={{ p: 2, display: 'flex', flexDirection: 'column', height:400 }}>  
+                    {CurrentPrediction(this.state)}
+                  </Paper>
+                </Grid>
+                <Grid item xs={6}>
+                  <Title>CURRENT PREDICTION</Title> 
+                  <Paper elevation={6} sx={{ p: 2, display: 'flex', flexDirection: 'column', height:400 }}>
+                    {CurrentPrediction(this.state)}
+                  </Paper>
+                </Grid>
               </Grid>
-              <Grid item xs={12} sx={{ mt: 4, mb: 4 }}>
-                <Paper elevation={6} sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  {RecentPredictions(this.state.PastEvents)}
-                </Paper>
+              <Grid sx={{ mt: 4, mb: 4 }}>
+                <Title>CATEGORY PREDICTIONS</Title> 
+                <Categories />
+              </Grid>
+              <Grid sx={{ mt: 4, mb: 4 }}>
+                <Title>ABOUT</Title> 
+                <About />
               </Grid>
             </div>
           </Container>
