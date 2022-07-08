@@ -10,6 +10,8 @@ import { Grid } from '@mui/material';
 import { InputAdornment } from '@mui/material';
 import getWeb3 from './getWeb3';
 import PredictionContract from "./contracts/Prediction.json";
+import ModalButtons from './ModalButtons';
+import ModalChart from './ModalChart';
 
   function BetOverModal(props) {
     const [values, setValues] = React.useState({
@@ -37,8 +39,8 @@ import PredictionContract from "./contracts/Prediction.json";
       top: '30%',
       left: '50%',
       transform: 'translate(-50%, -50%)',
-      width: 500,
-      bgcolor: 'background.paper',
+      width: 600,
+      bgcolor: '#000000',
       border: '2px solid #000',
       boxShadow: 24,
       p: 4,
@@ -56,10 +58,18 @@ import PredictionContract from "./contracts/Prediction.json";
           <Box sx={style}>
             <Grid spacing={2} container>
               <Grid item xs={12}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
+                <Typography id="modal-modal-title" variant="h6" color='secondary' component="h2">
                   Bet Over
                 </Typography>
                 <Divider/>
+              </Grid>
+              <Grid item container xs={12}>
+                <Grid item xs={7}>
+                  {ModalChart([parseInt(props.props.LastPrediction.overPool),parseInt(props.props.LastPrediction.underPool)])}
+                </Grid>
+                <Grid item xs={5}>
+                  <ModalButtons/>
+                </Grid>
               </Grid>
               <Grid item sx={{mt:3}} xs={12}>
                 <TextField
@@ -67,6 +77,7 @@ import PredictionContract from "./contracts/Prediction.json";
                     label="Wager Amount"
                     type="number"
                     fullWidth
+                    color='secondary'
                     InputProps={{
                       endAdornment: <InputAdornment position="end">eth</InputAdornment>,
                     }}
@@ -79,10 +90,10 @@ import PredictionContract from "./contracts/Prediction.json";
               </Grid>
               <Grid item xs={6}/>
               <Grid item xs={3}>
-                <Button variant="contained" onClick={handleBet} fullWidth color="success" >Bet</Button>
+                <Button variant="contained" onClick={handleBet} fullWidth color="info" >Place Bet</Button>
               </Grid>
               <Grid item xs={3}>
-                <Button variant="contained" onClick={handleClose} fullWidth color="error" >Cancel</Button>
+                <Button variant="contained" onClick={handleClose} fullWidth color="secondary" >Cancel</Button>
               </Grid>
             </Grid>
           </Box>

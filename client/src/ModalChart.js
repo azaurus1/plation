@@ -2,14 +2,14 @@ import React, { Component } from "react";
 import Chart from "react-apexcharts";
 
 
-export default function DonutChart(props){
+export default function ModalChart(props){
       const options = {
         labels: ["Over", "Under"],
         colors: ['#F46228','#FFFFFF'],
         legend: {show:false},
         tooltip: {show: false},
         datalabels: {enabled:false},
-        chart: {offsetX:0},
+        chart: {offsetX:0, width:'50%'},
         stroke: {width:0},
         fill: {type: 'solid'},
         plotOptions: {

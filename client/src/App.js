@@ -10,12 +10,14 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { Container } from "@mui/material";
 import { Box } from "@mui/material";
 import CurrentPrediction from "./CurrentPrediction";
+import LastPrediction from "./LastPrediction";
 import { ContentPasteSearchOutlined } from "@mui/icons-material";
 import ButtonAppBar from "./AppBar";
 import { themeOptions } from "./Theme";
 import Title from './Title';
 import Categories from "./Categories";
 import About from "./About";
+
 
 const mdTheme = createTheme(themeOptions);
 
@@ -64,7 +66,7 @@ class App extends Component {
   render() {
     return (
       <ThemeProvider theme={mdTheme}>
-        <ButtonAppBar />
+        {ButtonAppBar(this.state)}
         <Box sx={{ display: 'flex' }}>
           <CssBaseline />
           <Container maxWidth='false' sx={{ml:10,mr:10}}>
@@ -73,7 +75,7 @@ class App extends Component {
                 <Grid item xs={6}>
                   <Title>LAST PREDICTION</Title> 
                   <Paper elevation={6} sx={{ p: 2, display: 'flex', flexDirection: 'column', height:400 }}>  
-                    {CurrentPrediction(this.state)}
+                    {LastPrediction(this.state)}
                   </Paper>
                 </Grid>
                 <Grid item xs={6}>
