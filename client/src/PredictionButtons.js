@@ -36,10 +36,10 @@ import ModalChart from './ModalChart';
 
     const style = {
       position: 'absolute',
-      top: '30%',
+      top: '50%',
       left: '50%',
       transform: 'translate(-50%, -50%)',
-      width: 600,
+      width: 700,
       bgcolor: '#000000',
       border: '2px solid #000',
       boxShadow: 24,
@@ -78,22 +78,37 @@ import ModalChart from './ModalChart';
                     type="number"
                     fullWidth
                     color='secondary'
+                    focused
                     InputProps={{
-                      endAdornment: <InputAdornment position="end">eth</InputAdornment>,
+                      endAdornment: <InputAdornment position="end"><p style={{color:"#BABABA"}}>eth</p></InputAdornment>,
                     }}
                     InputLabelProps={{
                       shrink: true,
                     }}
                     value={values.amount}
+                    sx={{
+                      input:
+                      {color:'#BABABA'}
+                      }}
                     onChange={handleChange('amount')}
                   />  
+              </Grid>
+              <Grid container item xs={12}>
+                <Grid item xs={6}>
+                  <p style={{color:"#BABABA"}}>Estimated Winnings</p>
+                  <p style={{color:"#BABABA"}}>Share of Under Pool</p>
+                </Grid>
+                <Grid item xs={6}>
+                  <p style={{color:"#FFFFFF"}}>3 ETH</p>
+                  <p style={{color:"#FFFFFF"}}>60 %</p>
+                </Grid>
               </Grid>
               <Grid item xs={6}/>
               <Grid item xs={3}>
                 <Button variant="contained" onClick={handleBet} fullWidth color="info" >Place Bet</Button>
               </Grid>
               <Grid item xs={3}>
-                <Button variant="contained" onClick={handleClose} fullWidth color="secondary" >Cancel</Button>
+                <Button variant="contained" onClick={handleClose} fullWidth color="secondary" >Close</Button>
               </Grid>
             </Grid>
           </Box>
@@ -125,11 +140,11 @@ import ModalChart from './ModalChart';
 
     const style = {
       position: 'absolute',
-      top: '30%',
+      top: '50%',
       left: '50%',
       transform: 'translate(-50%, -50%)',
-      width: 500,
-      bgcolor: 'background.paper',
+      width: 700,
+      bgcolor: '#000000',
       border: '2px solid #000',
       boxShadow: 24,
       p: 4,
@@ -145,12 +160,20 @@ import ModalChart from './ModalChart';
           aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-          <Grid spacing={2} container>
+            <Grid spacing={2} container>
               <Grid item xs={12}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
+                <Typography id="modal-modal-title" variant="h6" color='secondary' component="h2">
                   Bet Under
                 </Typography>
                 <Divider/>
+              </Grid>
+              <Grid item container xs={12}>
+                <Grid item xs={7}>
+                  {ModalChart([parseInt(props.props.LastPrediction.overPool),parseInt(props.props.LastPrediction.underPool)])}
+                </Grid>
+                <Grid item xs={5}>
+                  <ModalButtons/>
+                </Grid>
               </Grid>
               <Grid item sx={{mt:3}} xs={12}>
                 <TextField
@@ -158,22 +181,38 @@ import ModalChart from './ModalChart';
                     label="Wager Amount"
                     type="number"
                     fullWidth
+                    color='secondary'
+                    focused
                     InputProps={{
-                      endAdornment: <InputAdornment position="end">eth</InputAdornment>,
+                      endAdornment: <InputAdornment position="end"><p style={{color:"#BABABA"}}>eth</p></InputAdornment>,
                     }}
                     InputLabelProps={{
                       shrink: true,
                     }}
                     value={values.amount}
+                    sx={{
+                      input:
+                      {color:'#BABABA'}
+                      }}
                     onChange={handleChange('amount')}
-                  />
+                  />  
+              </Grid>
+              <Grid container item xs={12}>
+                <Grid item xs={6}>
+                  <p style={{color:"#BABABA"}}>Estimated Winnings</p>
+                  <p style={{color:"#BABABA"}}>Share of Over Pool</p>
+                </Grid>
+                <Grid item xs={6}>
+                  <p style={{color:"#FFFFFF"}}>3 ETH</p>
+                  <p style={{color:"#FFFFFF"}}>60 %</p>
+                </Grid>
               </Grid>
               <Grid item xs={6}/>
               <Grid item xs={3}>
-                <Button variant="contained" onClick={handleBet} fullWidth color="success" >Bet</Button>
+                <Button variant="contained" onClick={handleBet} fullWidth color="info" >Place Bet</Button>
               </Grid>
               <Grid item xs={3}>
-                <Button variant="contained" onClick={handleClose} fullWidth color="error" >Cancel</Button>
+                <Button variant="contained" onClick={handleClose} fullWidth color="secondary" >Close</Button>
               </Grid>
             </Grid>
           </Box>

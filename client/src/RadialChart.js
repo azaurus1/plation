@@ -9,7 +9,7 @@ export default function DonutChart(props){
         legend: {show:false},
         tooltip: {show: false},
         datalabels: {enabled:false},
-        chart: {offsetX:0},
+        chart: {offsetY: -20, offsetX:-50, width:'30%'},
         stroke: {width:0},
         fill: {type: 'solid'},
         plotOptions: {

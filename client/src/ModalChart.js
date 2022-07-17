@@ -9,7 +9,7 @@ export default function ModalChart(props){
         legend: {show:false},
         tooltip: {show: false},
         datalabels: {enabled:false},
-        chart: {offsetX:0, width:'50%'},
+        chart: {offsetX:-70, width:'30%'},
         stroke: {width:0},
         fill: {type: 'solid'},
         plotOptions: {
